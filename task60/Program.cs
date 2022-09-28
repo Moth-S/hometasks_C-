@@ -6,25 +6,38 @@
 // 27(0,0,1) 90(0,1,1)
 // 26(1,0,1) 55(1,1,1)
 
-int GetIntValue() //возвращает целое случайное число
+int GetInt2DigitNumber() //возвращает целое двухзначное случайное число
+{
+    return new Random().Next(10, 100);
+}
+
+int GetInt1DigitNumber() //возвращает случайную цифру
 {
     return new Random().Next(1, 10);
 }
 
-int[,,] CreateArray(int rows, int columns, int depth) //создает трехмерный массив
+int[,,] Create3DArray(int rows, int columns, int depth) //создает трехмерный массив
 {
     return new int[rows, columns, depth];
 }
 
-int[,,] GetArray(int[,,] arr) //заполняет 3d массив случайными числами [0,9]
+int[] Create1DArray(int length) //создает одномерный массив массив
 {
+    return new int[length];
+}
+
+int[,,] Get3DArray(int[,,] arr, int[] array) //заполняет 3d массив  числами из одномерного массива
+{
+    int count=0;
     for (int i = 0; i < arr.GetLength(0); i++)
     {
         for (int j = 0; j < arr.GetLength(1); j++)
         {
             for (int k = 0; k < arr.GetLength(2); k++)
             {
-                arr[i, j, k] = GetIntValue();
+                arr[i, j, k] = array[count];
+                count++;
+
             }
 
         }
@@ -32,7 +45,7 @@ int[,,] GetArray(int[,,] arr) //заполняет 3d массив случай�
     return arr;
 }
 
-void PrintArray(int[,,] arr)//печатает трехмерный массив 
+void Print3DArray(int[,,] arr)//печатает трехмерный массив 
 {
     for (int i = 0; i < arr.GetLength(0); i++)
     {
@@ -48,7 +61,31 @@ void PrintArray(int[,,] arr)//печатает трехмерный массив
     }
 }
 
-int[,,] array3D = CreateArray(GetIntValue(), GetIntValue(), GetIntValue());
+int[] GetArray(int[] arr)//заполняет одномерный массив неповторяющимися двузначными числами
+{
+    for (int i = 0; i < arr.Length; i++)
+    {
+        arr[i]=GetInt2DigitNumber();
+        if (i>0) 
+        {
+            for (int j = 0; j < i; j++)
+            {
+                while (arr[i]==arr[j])
+                {
+                    arr[i] = GetInt2DigitNumber();
+                    j=0;
+                }
+                
+            }
+        }
+    }
+    return arr;
+}
 
-GetArray(array3D);
-PrintArray(array3D);
+
+int[,,] array3D = Create3DArray(GetInt1DigitNumber(), GetInt1DigitNumber(), GetInt1DigitNumber());
+int[] array = Create1DArray(array3D.GetLength(0)*array3D.GetLength(1)*array3D.GetLength(2));
+
+GetArray(array);
+Get3DArray(array3D, array);
+Print3DArray(array3D);
